@@ -7,11 +7,14 @@ npm install electron-oauth-twitter
 ```
 
 ### Diving into OAuth
-See example. You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
+1. You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
 
-Set **Callback URL** at settings of you app.
+2. Set **Callback URL** at settings of you app.
 
-![](http://i.imgur.com/MKLABt3.png)
+  ![](http://i.imgur.com/MKLABt3.png)
+
+3.  See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
+
 
 ```javascript
 var dialog = require('electron').dialog;
@@ -34,6 +37,3 @@ twitter.startRequest().then(function(result) {
 
 ---
 MIT licensed
-
-electron not found
-https://github.com/atom/electron/blob/master/docs/tutorial/using-native-node-modules.md
