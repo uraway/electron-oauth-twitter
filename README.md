@@ -1,5 +1,5 @@
 # electron-oauth-twitter
-This is [Electron](http://electron.atom.io/) module that helps to ealsily OAuth authenticate in Electron.
+This is [Electron](http://electron.atom.io/) module that easily OAuth authenticates your Electron app with twitter.
 
 ### Install
 ```

@@ -1,8 +1,7 @@
 'use strict';
 
-import assert from "assert";
+import assert from 'assert';
 import { BrowserWindow } from 'electron';
-import TwitterAPI from 'node-twitter-api';
 import { OAuth } from 'oauth';
 
 export default class AuthWindow {
