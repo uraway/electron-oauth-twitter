@@ -7,13 +7,15 @@ npm install electron-oauth-twitter
 ```
 
 ### Diving into OAuth
-1. You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
+1. [Register your app](https://apps.twitter.com/).
 
-2. Set **Callback URL** at settings of you app.
+2. You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
+
+3. Set **Callback URL** at settings of you app. If you do not set Callback URL, it will evoke [PIN Based OAuth](https://dev.twitter.com/oauth/pin-based).
 
   ![](http://i.imgur.com/MKLABt3.png)
 
-3.  See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
+4. Edit your Electron main file. See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
 
 
 ```javascript
