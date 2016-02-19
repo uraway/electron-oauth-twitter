@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/uraway/electron-oauth-twitter/issues"
   },
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Twitter OAuth Window library.",
   "main": "lib/OauthTwitter.js",
   "files": [
@@ -28,7 +28,10 @@
   },
   "keywords": [
     "electron",
-    "oauth"
+    "oauth",
+    "twitter",
+    "oauth-twitter",
+    "authentication"
   ],
   "devDependencies": {
     "babel-cli": "^6.3.17",

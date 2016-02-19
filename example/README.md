@@ -1,6 +1,6 @@
 # electron-oauth-twitter example
-## prerequisite
-You need to replace `****` with your Consuer Key and Consumer Secret from [here](https://apps.twitter.com/).
+## Prerequisite
+You need to replace `****` with your **Consuer Key** and **Consumer Secret** after you [register your app]((https://apps.twitter.com/)).
 
 ```javascript
 // LICENSE : MIT
