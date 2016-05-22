@@ -16,7 +16,7 @@ export default class AuthWindow {
   }
 
   startRequest() {
-    var authUrl = 'https://api.twitter.com/oauth/authenticate?oauth_token=';
+    let authUrl = 'https://api.twitter.com/oauth/authenticate?oauth_token=';
     let oauth = new OAuth(
       'https://api.twitter.com/oauth/request_token',
       'https://api.twitter.com/oauth/access_token',
@@ -54,7 +54,7 @@ export default class AuthWindow {
         return;
       }
 
-      var url = authUrl + oauth_token;
+      let url = authUrl + oauth_token;
       this.getAccessToken(oauth, oauth_token, oauth_token_secret, url);
     });
     return deferredPromise;
