@@ -1,29 +1,32 @@
 # electron-oauth-twitter example
+
 ## Prerequisite
-You need to replace `****` with your **Consuer Key** and **Consumer Secret** after you [register your app]((https://apps.twitter.com/)).
+
+You need to replace `****` with your **Consuer Key** and **Consumer Secret**
+after you [register your app]((https://apps.twitter.com/)).
 
 ```javascript
 // LICENSE : MIT
-var dialog = require('electron').dialog;
+const { dialog } = require('electron');
 
-var OauthTwitter = require('../lib/OauthTwitter');
+const OauthTwitter = require('../lib/OauthTwitter');
 
-var twitter = new OauthTwitter({
+const twitter = new OauthTwitter({
   key: '****',
   secret: '****',
 });
 
-twitter.startRequest().then(function(result) {
-  var accessToken = result.oauth_access_token;
-  var accessTokenSecret = result.oauth_access_token_secret;
-  dialog.showErrorBox('Status', 'Token: ' + accessToken + '\nSecret: ' + accessTokenSecret);
-}).catch(function(error) {
+twitter.startRequest().then((result) => {
+  const accessToken = result.oauth_access_token;
+  const accessTokenSecret = result.oauth_access_token_secret;
+  dialog.showErrorBox('Status', `Token: ${accessToken} \nSecret: ${accessTokenSecret}`);
+}).catch((error) => {
   console.error(error, error.stack);
 });
+
 ```
 
 ## Usage
-```
-$ npm install
-$ npm start
-```
+
+  $ npm install
+  $ npm start
