@@ -15,8 +15,9 @@ export default class AuthWindow {
     this.reject = null;
   }
 
-  startRequest() {
-    let authUrl = 'https://api.twitter.com/oauth/authenticate?oauth_token=';
+  startRequest(options={}) {
+    const force_login = options["force_login"] || false
+    let authUrl = `https://api.twitter.com/oauth/authenticate?force_login=${force_login.toString()};oauth_token=`;
     let oauth = new OAuth(
       'https://api.twitter.com/oauth/request_token',
       'https://api.twitter.com/oauth/access_token',
