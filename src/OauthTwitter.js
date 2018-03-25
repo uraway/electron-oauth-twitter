@@ -67,26 +67,6 @@ export default class {
         new Error('the window is closed before complete the authentication.'),
       );
     });
-    const resolveAccessToken = (url) => {
-      const matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/);
-      oauth.getOAuthAccessToken(
-        oauthToken,
-        oauthTokenSecret,
-        matched[2],
-        (error, oauthAccessTokenSecret, oauthAccessTokenSecretSecret) => {
-          if (error) {
-            this.reject(error);
-            return;
-          }
-
-          this.resolve({
-            oauthAccessTokenSecret,
-            oauthAccessTokenSecretSecret,
-          });
-          this.window.close();
-        },
-      );
-    };
     this.window.webContents.on('will-navigate', (event, url) => {
       /**
        * If 2fa is set, the url includes challenge_id, challenge_type
@@ -96,11 +76,29 @@ export default class {
         url.indexOf('challenge_id') >= 0
       ) {
         this.window.loadURL(url);
-        this.window.webContents.on('will-navigate', (event, url) => {
-          resolveAccessToken(url);
-        });
       } else {
-        resolveAccessToken(url);
+        const matched = url.match(
+          /\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/,
+        );
+        if (matched) {
+          oauth.getOAuthAccessToken(
+            oauthToken,
+            oauthTokenSecret,
+            matched[2],
+            (error, oauthAccessTokenSecret, oauthAccessTokenSecretSecret) => {
+              if (error) {
+                this.reject(error);
+                return;
+              }
+
+              this.resolve({
+                oauth_access_token: oauthAccessTokenSecret,
+                oauth_access_token_secret: oauthAccessTokenSecretSecret,
+              });
+              this.window.close();
+            },
+          );
+        }
       }
     });
   }
