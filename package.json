@@ -14,18 +14,15 @@
   "version": "1.1.0",
   "description": "Twitter OAuth Window library.",
   "main": "lib/OauthTwitter.js",
-  "files": [
-    "lib",
-    "src"
-  ],
+  "files": ["lib", "src"],
   "directories": {
     "test": "test"
   },
   "scripts": {
     "build": "babel src --out-dir lib --source-maps",
     "watch": "babel src --out-dir lib --watch --source-maps",
-    "lint:fix": "eslint --ext .js,.jsx ./ --fix",
-    "lint": "npm run lint:*",
+    "lint:fix": "eslint src/OauthTwitter.js example/index.babel.js --fix",
+    "lint": "eslint src/OauthTwitter.js example/index.babel.js",
     "prepublish": "npm run --if-present build"
   },
   "keywords": [
