@@ -3,30 +3,41 @@
 ## Prerequisite
 
 You need to replace `****` with your **Consuer Key** and **Consumer Secret**
-after you [register your app]((https://apps.twitter.com/)).
+after you [register your app](<(https://apps.twitter.com/)>).
 
 ```javascript
-// LICENSE : MIT
-const { dialog } = require('electron');
+const { app, dialog } = require('electron');
 
-const OauthTwitter = require('../lib/OauthTwitter');
+app.once('ready', () => {
+  const OauthTwitter = require('../lib/OauthTwitter'); // eslint-disable-line global-require
+  const twitter = new OauthTwitter({
+    key: '****',
+    secret: '****',
+  });
 
-const twitter = new OauthTwitter({
-  key: '****',
-  secret: '****',
+  const options = {
+    force_login: true,
+  };
+
+  twitter
+    .startRequest(options)
+    .then((result) => {
+      const accessToken = result.oauth_access_token;
+      const accessTokenSecret = result.oauth_access_token_secret;
+      dialog.showErrorBox(
+        'Status',
+        `Token: ${accessToken} \nSecret: ${accessTokenSecret}`,
+      );
+    })
+    .catch((error) => {
+      console.error(error, error.stack); // eslint-disable-line no-console
+    });
 });
-
-twitter.startRequest().then((result) => {
-  const accessToken = result.oauth_access_token;
-  const accessTokenSecret = result.oauth_access_token_secret;
-  dialog.showErrorBox('Status', `Token: ${accessToken} \nSecret: ${accessTokenSecret}`);
-}).catch((error) => {
-  console.error(error, error.stack);
-});
-
 ```
 
 ## Usage
 
-  $ npm install
-  $ npm start
+```
+$ npm install
+$ npm start
+```

@@ -21,28 +21,33 @@ npm install electron-oauth-twitter
 4.  Edit your Electron main file. See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
 
 ```javascript
-var dialog = require('electron').dialog;
+const { app, dialog } = require('electron');
 
-var OauthTwitter = require('electron-oauth-twitter');
-
-var twitter = new OauthTwitter({
-  key: '****',
-  secret: '****',
-});
-
-twitter
-  .startRequest()
-  .then(function(result) {
-    var accessToken = result.oauth_access_token;
-    var accessTokenSecret = result.oauth_access_token_secret;
-    dialog.showErrorBox(
-      'Status',
-      'Token: ' + accessToken + '\nSecret: ' + accessTokenSecret,
-    );
-  })
-  .catch(function(error) {
-    console.error(error, error.stack);
+app.once('ready', () => {
+  const OauthTwitter = require('electron-oauth-twitter'); // eslint-disable-line global-require
+  const twitter = new OauthTwitter({
+    key: '****',
+    secret: '****',
   });
+
+  const options = {
+    force_login: true,
+  };
+
+  twitter
+    .startRequest(options)
+    .then((result) => {
+      const accessToken = result.oauth_access_token;
+      const accessTokenSecret = result.oauth_access_token_secret;
+      dialog.showErrorBox(
+        'Status',
+        `Token: ${accessToken} \nSecret: ${accessTokenSecret}`,
+      );
+    })
+    .catch((error) => {
+      console.error(error, error.stack); // eslint-disable-line no-console
+    });
+});
 ```
 
 ---
