@@ -1,18 +1,15 @@
-# electron-oauth-twitter example
-
-## Prerequisite
-
-You need to replace `****` with your **Consuer Key** and **Consumer Secret**
-after you [register your app](<(https://apps.twitter.com/)>).
-
-```javascript
+// LICENSE : MIT
 const { app, dialog } = require('electron');
+
+const TWITTER_CLIENT_KEY = '9HWNw0Z5eNI7dDjyRrQXfHpJW';
+const TWITTER_CLIENT_SECRET =
+  't3C4trzIkUy8dEN6msyf5wccQBcBTCxkA4FCaPjb0HpRg3wns6';
 
 app.once('ready', () => {
   const OauthTwitter = require('../lib/OauthTwitter'); // eslint-disable-line global-require
   const twitter = new OauthTwitter({
-    key: '****',
-    secret: '****',
+    key: TWITTER_CLIENT_KEY,
+    secret: TWITTER_CLIENT_SECRET,
   });
 
   const options = {
@@ -33,11 +30,3 @@ app.once('ready', () => {
       console.error(error, error.stack); // eslint-disable-line no-console
     });
 });
-```
-
-## Usage
-
-```
-$ npm install
-$ npm start
-```

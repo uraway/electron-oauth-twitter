@@ -1,41 +1,55 @@
 # electron-oauth-twitter
+
 This is [Electron](http://electron.atom.io/) module that easily OAuth authenticates your Electron app with twitter.
 
 ### Install
+
 ```
 npm install electron-oauth-twitter
 ```
 
 ### Diving into OAuth
-1. [Register your app](https://apps.twitter.com/).
 
-2. You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
+1.  [Register your app](https://apps.twitter.com/).
 
-3. Set **Callback URL** at settings of you app. If you do not set Callback URL, it will evoke [PIN Based OAuth](https://dev.twitter.com/oauth/pin-based).
+2.  You need **Consumer Key (API Key)** and **Consumer Secret (API Secret)**.
 
-  ![](http://i.imgur.com/MKLABt3.png)
+3.  Set **Callback URL** at settings of you app. If you do not set Callback URL, it will evoke [PIN Based OAuth](https://dev.twitter.com/oauth/pin-based).
 
-4. Edit your Electron main file. See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
+![](http://i.imgur.com/MKLABt3.png)
 
+4.  Edit your Electron main file. See [example](https://github.com/uraway/electron-oauth-twitter/tree/master/example). Dive into OAuth!
 
 ```javascript
-var dialog = require('electron').dialog;
+const { app, dialog } = require('electron');
 
-var OauthTwitter = require('electron-oauth-twitter');
+app.once('ready', () => {
+  const OauthTwitter = require('electron-oauth-twitter'); // eslint-disable-line global-require
+  const twitter = new OauthTwitter({
+    key: '****',
+    secret: '****',
+  });
 
-var twitter = new OauthTwitter({
-  key: '****',
-  secret: '****',
-});
+  const options = {
+    force_login: true,
+  };
 
-twitter.startRequest().then(function(result) {
-  var accessToken = result.oauth_access_token;
-  var accessTokenSecret = result.oauth_access_token_secret;
-  dialog.showErrorBox('Status', 'Token: ' + accessToken + '\nSecret: ' + accessTokenSecret);
-}).catch(function(error) {
-  console.error(error, error.stack);
+  twitter
+    .startRequest(options)
+    .then((result) => {
+      const accessToken = result.oauth_access_token;
+      const accessTokenSecret = result.oauth_access_token_secret;
+      dialog.showErrorBox(
+        'Status',
+        `Token: ${accessToken} \nSecret: ${accessTokenSecret}`,
+      );
+    })
+    .catch((error) => {
+      console.error(error, error.stack); // eslint-disable-line no-console
+    });
 });
 ```
 
 ---
+
 MIT licensed
