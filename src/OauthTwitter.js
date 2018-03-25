@@ -61,12 +61,13 @@ export default class AuthWindow {
     return deferredPromise;
   }
 
-  getAccessToken(oauth, oauth_token, oauth_token_secret, url) {
+  getAccessToken(oauth, oauth_token, oauth_token_secret, authUrl) {
     this.window = new BrowserWindow({ width: 800, height: 600 });
+    this.window.loadURL(authUrl);
     this.window.on('close', () => {
       this.reject(new Error('the window is closed before complete the authentication.'));
     });
-    this.window.webContents.on('will-navigate', (event, url) => {
+    const resolveAccessToken = (url) => {
       let matched;
       if (matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/)) {
         oauth.getOAuthAccessToken(oauth_token, oauth_token_secret, matched[2], (error, oauth_access_token, oauth_access_token_secret) => {
@@ -82,9 +83,19 @@ export default class AuthWindow {
           this.window.close();
         });
       }
-
-      event.preventDefault();
+    }
+    this.window.webContents.on('will-navigate', (event, url) => {
+      /**
+       * If 2fa is set, the url includes challenge_id, challenge_type
+       */
+      if (url.indexOf('challenge_type') >= 0 && url.indexOf('challenge_id') >= 0) {
+        this.window.loadURL(url);
+        this.window.webContents.on('will-navigate', (event, url) => {
+          resolveAccessToken(url);
+        });
+      } else {
+        resolveAccessToken(url);
+      }
     });
-    this.window.loadURL(url);
   }
 }
