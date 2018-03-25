@@ -1,28 +1,32 @@
 // LICENSE : MIT
-const { app, BrowserWindow, dialog } = require('electron');
+const { app, dialog } = require('electron');
 
-const TWITTER_CLIENT_KEY = 'Q4omCZC0wD1uUsb923lkCQfSa';
-const TWITTER_CLIENT_SECRET = 'KJaYcwIIZnS3A7saDJbkMGe96a70D8Xu8roxU1Qo4eS5wUDaBE';
+const TWITTER_CLIENT_KEY = '9HWNw0Z5eNI7dDjyRrQXfHpJW';
+const TWITTER_CLIENT_SECRET =
+  't3C4trzIkUy8dEN6msyf5wccQBcBTCxkA4FCaPjb0HpRg3wns6';
 
-let window = null
-
-// Wait until the app is ready
 app.once('ready', () => {
-  const OauthTwitter = require('../lib/OauthTwitter');
+  const OauthTwitter = require('../lib/OauthTwitter'); // eslint-disable-line global-require
   const twitter = new OauthTwitter({
     key: TWITTER_CLIENT_KEY,
-    secret: TWITTER_CLIENT_SECRET
+    secret: TWITTER_CLIENT_SECRET,
   });
 
   const options = {
-    force_login: true
-  }
+    force_login: true,
+  };
 
-  twitter.startRequest(options).then((result) => {
-    const accessToken = result.oauth_access_token;
-    const accessTokenSecret = result.oauth_access_token_secret;
-    dialog.showErrorBox('Status', `Token: ${accessToken} \nSecret: ${accessTokenSecret}`);
-  }).catch((error) => {
-    console.error(error, error.stack);
-  });
-})
+  twitter
+    .startRequest(options)
+    .then((result) => {
+      const accessToken = result.oauth_access_token;
+      const accessTokenSecret = result.oauth_access_token_secret;
+      dialog.showErrorBox(
+        'Status',
+        `Token: ${accessToken} \nSecret: ${accessTokenSecret}`,
+      );
+    })
+    .catch((error) => {
+      console.error(error, error.stack); // eslint-disable-line no-console
+    });
+});
