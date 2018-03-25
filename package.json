@@ -11,7 +11,7 @@
   "bugs": {
     "url": "https://github.com/uraway/electron-oauth-twitter/issues"
   },
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Twitter OAuth Window library.",
   "main": "lib/OauthTwitter.js",
   "files": ["lib", "src"],
@@ -23,7 +23,7 @@
     "watch": "babel src --out-dir lib --watch --source-maps",
     "lint:fix": "eslint src/OauthTwitter.js example/index.babel.js --fix",
     "lint": "eslint src/OauthTwitter.js example/index.babel.js",
-    "prepublish": "npm run --if-present build"
+    "prepare": "npm run build"
   },
   "keywords": [
     "electron",
