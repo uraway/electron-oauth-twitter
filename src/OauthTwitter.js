@@ -1,10 +1,8 @@
-'use strict';
-
 import assert from 'assert';
 import { BrowserWindow } from 'electron';
 import { OAuth } from 'oauth';
 
-export default class AuthWindow {
+export default class {
   constructor({ key, secret }) {
     assert(key, 'OAuth Consumer Key is needed!');
     assert(secret, 'OAuth Consumer secret is needed!');
@@ -15,20 +13,20 @@ export default class AuthWindow {
     this.reject = null;
   }
 
-  startRequest(options={}) {
-    const force_login = options["force_login"] || false
-    let authUrl = `https://api.twitter.com/oauth/authenticate?force_login=${force_login.toString()};oauth_token=`;
-    let oauth = new OAuth(
+  startRequest(options = {}) {
+    const forceLogin = options.force_login || false;
+    const authUrl = `https://api.twitter.com/oauth/authenticate?force_login=${forceLogin.toString()};oauth_token=`;
+    const oauth = new OAuth(
       'https://api.twitter.com/oauth/request_token',
       'https://api.twitter.com/oauth/access_token',
       this.consumerKey,
       this.consumerSecret,
       '1.0A',
       null,
-      'HMAC-SHA1'
+      'HMAC-SHA1',
     );
 
-    let deferredPromise = new Promise((resolve, reject) => {
+    const deferredPromise = new Promise((resolve, reject) => {
       let isResolved = false;
       this.resolve = (value) => {
         if (isResolved) {
@@ -39,7 +37,7 @@ export default class AuthWindow {
         resolve(value);
       };
 
-      this.reject = (error)=> {
+      this.reject = (error) => {
         if (isResolved) {
           return;
         }
@@ -49,46 +47,54 @@ export default class AuthWindow {
       };
     });
 
-    oauth.getOAuthRequestToken((error, oauth_token, oauth_token_secret, results) => {
+    oauth.getOAuthRequestToken((error, oauthToken, oauthTokenSecret) => {
       if (error) {
         this.reject(error);
         return;
       }
 
-      let url = authUrl + oauth_token;
-      this.getAccessToken(oauth, oauth_token, oauth_token_secret, url);
+      const url = authUrl + oauthToken;
+      this.getAccessToken(oauth, oauthToken, oauthTokenSecret, url);
     });
     return deferredPromise;
   }
 
-  getAccessToken(oauth, oauth_token, oauth_token_secret, authUrl) {
+  getAccessToken(oauth, oauthToken, oauthTokenSecret, authUrl) {
     this.window = new BrowserWindow({ width: 800, height: 600 });
     this.window.loadURL(authUrl);
     this.window.on('close', () => {
-      this.reject(new Error('the window is closed before complete the authentication.'));
+      this.reject(
+        new Error('the window is closed before complete the authentication.'),
+      );
     });
     const resolveAccessToken = (url) => {
-      let matched;
-      if (matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/)) {
-        oauth.getOAuthAccessToken(oauth_token, oauth_token_secret, matched[2], (error, oauth_access_token, oauth_access_token_secret) => {
+      const matched = url.match(/\?oauth_token=([^&]*)&oauth_verifier=([^&]*)/);
+      oauth.getOAuthAccessToken(
+        oauthToken,
+        oauthTokenSecret,
+        matched[2],
+        (error, oauthAccessTokenSecret, oauthAccessTokenSecretSecret) => {
           if (error) {
             this.reject(error);
             return;
           }
 
           this.resolve({
-            oauth_access_token: oauth_access_token,
-            oauth_access_token_secret: oauth_access_token_secret,
+            oauthAccessTokenSecret,
+            oauthAccessTokenSecretSecret,
           });
           this.window.close();
-        });
-      }
-    }
+        },
+      );
+    };
     this.window.webContents.on('will-navigate', (event, url) => {
       /**
        * If 2fa is set, the url includes challenge_id, challenge_type
        */
-      if (url.indexOf('challenge_type') >= 0 && url.indexOf('challenge_id') >= 0) {
+      if (
+        url.indexOf('challenge_type') >= 0 &&
+        url.indexOf('challenge_id') >= 0
+      ) {
         this.window.loadURL(url);
         this.window.webContents.on('will-navigate', (event, url) => {
           resolveAccessToken(url);
